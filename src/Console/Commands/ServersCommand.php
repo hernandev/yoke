@@ -27,20 +27,18 @@ class ServersCommand extends BaseCommand
      * Execute the command.
      *
      * @param InputInterface $input
+     *
+     * @throws \Yoke\Servers\Exceptions\NotFoundException
      */
     protected function fire(InputInterface $input)
     {
-        // Get the available servers.
         $servers = $this->manager->getServers();
 
-        // If there is no servers registered.
         if (!count($servers)) {
             throw new NotFoundException('No servers available.');
-            // Otherwise.
-        } else {
-            // Render the servers table.
-            $this->serversTable($servers);
         }
+
+        $this->serversTable($servers);
     }
 
     /**
@@ -50,10 +48,7 @@ class ServersCommand extends BaseCommand
      */
     protected function serversTable(array $servers)
     {
-        // New table instance.
         $table = new Table($this->output);
-
-        // Set table headers.
         $table->setHeaders(['Name', 'Host', 'Username', 'Port', 'Auth. Method']);
 
         // Loop on available connections to build the rows.
@@ -63,10 +58,7 @@ class ServersCommand extends BaseCommand
             $rows[] = [$server->alias, $server->host, $server->user, $server->port, $server->authenticationMethod];
         }
 
-        // Set the table rows
         $table->setRows($rows);
-
-        // Render the table.
         $table->render();
     }
 }

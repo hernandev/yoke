@@ -72,7 +72,7 @@ class Server
      * @param string $key Attribute name.
      * @param mixed $value Attribute value
      */
-    public function __set($key, $value)
+    public function __set(string $key, $value)
     {
         // set the value into class attribute.
         $this->$key = $value;
@@ -85,7 +85,7 @@ class Server
      *
      * @return mixed
      */
-    public function __get($key)
+    public function __get(string $key)
     {
         return $this->$key;
     }
@@ -93,7 +93,7 @@ class Server
     /**
      * @return string The port portion of the shh connection string.
      */
-    protected function portParameter()
+    protected function portParameter(): string
     {
         return $this->port ? "-p{$this->port}" : '';
     }
@@ -101,7 +101,7 @@ class Server
     /**
      * @return string The password helper line.
      */
-    protected function passwordHelper()
+    public function passwordHelper(): string
     {
         return "Password: {$this->password}";
     }
@@ -109,7 +109,7 @@ class Server
     /**
      * @return string User and hostname portion of the ssh connection string.
      */
-    protected function userAndHostParameter()
+    protected function userAndHostParameter(): string
     {
         if ($this->user) {
             return "{$this->user}@{$this->host}";
@@ -121,9 +121,9 @@ class Server
     /**
      * @return string Private key portion of the connection string.
      */
-    protected function keyParameter()
+    protected function keyParameter(): string
     {
-        if ($this->authenticationMethod == 'key') {
+        if ($this->authenticationMethod === 'key') {
             return "-i{$this->privateKey}";
         }
 
@@ -133,7 +133,7 @@ class Server
     /**
      * @return string The final ssh connection string.
      */
-    public function connectionString()
+    public function connectionString(): string
     {
         $connectionString = "ssh {$this->keyParameter()} {$this->portParameter()} {$this->userAndHostParameter()}";
 
@@ -147,7 +147,7 @@ class Server
     /**
      * @return array Array encoded representation of the server connection.
      */
-    public function toArray()
+    public function toArray(): array
     {
         $configArray = [];
 

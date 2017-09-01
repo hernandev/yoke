@@ -41,8 +41,10 @@ class Encrypter
      * @param string $value
      *
      * @return string
+     *
+     * @throws \RuntimeException
      */
-    public function encrypt($value)
+    public function encrypt($value): string
     {
         // Generate a IV.
         $iv = random_bytes($this->iv_size);
@@ -80,6 +82,8 @@ class Encrypter
      * @param string $payload The encrypted payload
      *
      * @return mixed The Decrypted value.
+     *
+     * @throws \RuntimeException
      */
     public function decrypt($payload)
     {
@@ -107,7 +111,7 @@ class Encrypter
      *
      * @return string A random encryption key.
      */
-    public static function generateKey()
+    public static function generateKey(): string
     {
         return base64_encode(random_bytes(32));
     }
@@ -118,8 +122,10 @@ class Encrypter
      * @param array $data Encrypted array payload.
      *
      * @return array Decrypted array.
+     *
+     * @throws \RuntimeException
      */
-    public function decryptArray(array $data)
+    public function decryptArray(array $data): array
     {
         $decryptedArray = [];
 
@@ -136,8 +142,10 @@ class Encrypter
      * @param array $data Array to be encrypted.
      *
      * @return array Encrypted array.
+     *
+     * @throws \RuntimeException
      */
-    public function encryptArray(array $data)
+    public function encryptArray(array $data): array
     {
         $encryptedArray = [];
 

@@ -45,14 +45,10 @@ class DeleteCommand extends BaseCommand
         // Greetings.
         $this->info('Server connection removal.');
 
-        // Ask for confirmation.
         $confirmed = $this->askConfirmation("Are you sure about deleting the connection {$alias}:");
 
-        // If confirmed.
         if ($confirmed) {
-            // Delete the connection.
             $this->manager->deleteServer($alias);
-            // And congratulate.
             $this->info('Server connection deleted successfully!');
         }
     }

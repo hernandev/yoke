@@ -21,7 +21,6 @@ class ConnectCommand extends BaseCommand
      * @var array Command arguments.
      */
     protected $arguments = [
-        // Connection alias.
         ['alias', InputArgument::REQUIRED, 'Connection Alias'],
     ];
 

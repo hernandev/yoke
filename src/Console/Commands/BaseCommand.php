@@ -17,6 +17,11 @@ use Yoke\Servers\Manager;
  */
 abstract class BaseCommand extends Command
 {
+    const TYPE_INFO = 'info';
+    const TYPE_ERROR = 'error';
+    const TYPE_COMMENT = 'comment';
+    const TYPE_QUESTION = 'question';
+
     /**
      * @var string Command name.
      */
@@ -58,11 +63,10 @@ abstract class BaseCommand extends Command
      * @param InputInterface $input Application provided input handler.
      * @param OutputInterface $output Application provided output handler.
      *
-     * @return int|null|void
+     * @return int|null
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        // Assign input and output streams.
         $this->input = $input;
         $this->output = $output;
 
@@ -72,19 +76,15 @@ abstract class BaseCommand extends Command
         // Created and assign a new Servers Manager instance.
         $this->manager = new Manager();
 
-        // Call the child command fire() method.
         return $this->fire($input);
     }
 
     /**
      * Initialize the command for the console Application.
      */
-    protected function configure()
+    protected function configure(): void
     {
-        // Configure the command name.
         $this->setName($this->name);
-
-        // Configure the command description.
         $this->setDescription($this->description);
 
         // Loop through arguments and register them.
@@ -97,8 +97,6 @@ abstract class BaseCommand extends Command
      * Abstract fire method to be implemented on child commands.
      *
      * @param InputInterface $input
-     *
-     * @return
      */
     abstract protected function fire(InputInterface $input);
 
@@ -111,7 +109,7 @@ abstract class BaseCommand extends Command
      *
      * @return string The user input or the default value.
      */
-    protected function ask($question, $default = null)
+    protected function ask($question, $default = null): string
     {
         // Creates a new question instance, using the convention formatting.
         $askQuestion = new Question($this->format($question, 'question'), $default);
@@ -130,10 +128,10 @@ abstract class BaseCommand extends Command
      *
      * @return bool Confirmed or Not.
      */
-    protected function askConfirmation($question)
+    protected function askConfirmation($question): bool
     {
         // Creates a new confirmation instance using convention formatting.
-        $confirmQuestion = new ConfirmationQuestion($this->format("$question (Y/n)", 'question'), false);
+        $confirmQuestion = new ConfirmationQuestion($this->format("$question (y/N)", 'question'), false);
 
         // Do ask the question and return the input.
         return $this->questionHelper->ask($this->input, $this->output, $confirmQuestion);
@@ -147,7 +145,7 @@ abstract class BaseCommand extends Command
      *
      * @return string The formatted string.
      */
-    protected function format($text, $type = 'info')
+    protected function format($text, $type = self::TYPE_INFO): string
     {
         return "\n<{$type}>{$text}</{$type}> ";
     }
@@ -158,7 +156,7 @@ abstract class BaseCommand extends Command
      * @param string $text The string to be displayed.
      * @param string $format The coloring format.
      */
-    protected function writeln($text, $format = 'info')
+    protected function writeln($text, $format = self::TYPE_INFO)
     {
         // Uses output handler to write the formatted string.
         $this->output->writeln($this->format($text, $format));
@@ -182,7 +180,7 @@ abstract class BaseCommand extends Command
      */
     protected function question($text)
     {
-        $this->writeln($text, 'question');
+        $this->writeln($text, self::TYPE_QUESTION);
     }
 
     /**
@@ -192,7 +190,7 @@ abstract class BaseCommand extends Command
      */
     protected function info($text)
     {
-        $this->writeln($text, 'info');
+        $this->writeln($text);
     }
 
     /**
@@ -202,7 +200,7 @@ abstract class BaseCommand extends Command
      */
     protected function comment($text)
     {
-        $this->writeln($text, 'comment');
+        $this->writeln($text, self::TYPE_COMMENT);
     }
 
     /**
@@ -212,7 +210,7 @@ abstract class BaseCommand extends Command
      */
     protected function error($text)
     {
-        $this->writeln($text, 'error');
+        $this->writeln($text, self::TYPE_ERROR);
     }
 
     /**

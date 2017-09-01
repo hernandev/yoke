@@ -1,6 +1,7 @@
 <?php
 
 namespace Yoke\Console\Commands;
+
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -48,14 +49,12 @@ class AddCommand extends BaseCommand
             'system'
         );
 
-        if ($serverData['authenticationMethod'] == 'key') {
+        if ($serverData['authenticationMethod'] === 'key') {
             // Ask for private key if key was selected as authentication method.
             $serverData['privateKey'] = $this->ask('Private Key (~/.ssh/id_rsa):', $_SERVER['HOME'].'/.ssh/id_rsa');
-        } elseif ($serverData['authenticationMethod'] == 'password') {
+        } elseif ($serverData['authenticationMethod'] === 'password') {
             // Ask for password if password as selected as authentication method.
             $serverData['password'] = $this->ask('Password:');
-        } else {
-            // don't store anything when system is selected.
         }
 
         // Register the server connection data into servers manager.

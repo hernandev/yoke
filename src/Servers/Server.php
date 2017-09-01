@@ -135,13 +135,7 @@ class Server
      */
     public function connectionString(): string
     {
-        $connectionString = "ssh {$this->keyParameter()} {$this->portParameter()} {$this->userAndHostParameter()}";
-
-        if ($this->authenticationMethod == 'password') {
-            $connectionString = $this->passwordHelper()."\n".$connectionString;
-        }
-
-        return $connectionString;
+        return "ssh {$this->keyParameter()} {$this->portParameter()} {$this->userAndHostParameter()}";
     }
 
     /**

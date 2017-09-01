@@ -37,6 +37,14 @@ class ConnectCommand extends BaseCommand
         // Finds the store server connection using the provided alias.
         $server = $this->manager->getServer($alias);
 
+        if ($server->authenticationMethod === 'password') {
+            $showPassword = $this->askConfirmation('Show password for this server?');
+
+            if ($showPassword) {
+                $this->writeln($server->passwordHelper());
+            }
+        }
+
         // Write the console line to be executed on the bash side of
         // the string. sometimes it will contain a password
         // for usage while authenticating
